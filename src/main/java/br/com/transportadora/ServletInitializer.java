@@ -1,4 +1,4 @@
-package br.com.transportadora.transportadora;
+package br.com.transportadora;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
