@@ -25,7 +25,7 @@ import br.com.transportadora.repository.FilialRepository;
 public class FilialResource {
 	
 	@Autowired
-	FilialRepository filialRepository;
+	private FilialRepository filialRepository;
 	
 	@GetMapping("/filiais")
 	public List<Filial> listarFiliais(){
@@ -34,7 +34,7 @@ public class FilialResource {
 	
 	@GetMapping("/filial/{id}")
 	public ResponseEntity<Filial> listarFilial(@Valid @PathVariable(value = "id") Long id) {
-		Filial filial = filialRepository.findOne(id);
+		Filial filial = filialRepository.getOne(id);
 		if(filial == null) {
 			return ResponseEntity.notFound().build();
 		}
@@ -48,7 +48,7 @@ public class FilialResource {
 	
 	@DeleteMapping("/filial")
 	public ResponseEntity<Void> deletar(@PathVariable Long id) {
-		Filial filialExistente = filialRepository.findOne(id);
+		Filial filialExistente = filialRepository.getOne(id);
 		if(filialExistente == null) {
 			return ResponseEntity.notFound().build();
 		}
@@ -58,7 +58,7 @@ public class FilialResource {
 	
 	@PutMapping("/filial/{id}")
 	public ResponseEntity<Filial> atualizar(@Valid @RequestBody Filial filial,@PathVariable Long id) {
-		Filial filialExistente = filialRepository.findOne(id);
+		Filial filialExistente = filialRepository.getOne(id);
 		if(filialExistente == null) {
 			return ResponseEntity.notFound().build();
 		}

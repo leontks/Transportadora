@@ -3,6 +3,7 @@ package br.com.transportadora.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,62 +24,87 @@ public class Filial implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(nullable = false)
 	private Long id;
+	@Column(nullable = false)
 	private String nome;
-	private BigDecimal valor;
-	private String tipoTransporte;
-	private Long tempoMedio;
-
+	@Column(nullable = false)
+	private Boolean terrestre;
+	@Column(nullable = false)
+	private Boolean aereo;
+	@Column(nullable = false)
+	private Long tempoMedioAereo;
+	@Column(nullable = false)
+	private Long tempoMedioTerrestre;
+	@Column(nullable = false)
+	private BigDecimal valorAereo;
+	@Column(nullable = false)
+	private BigDecimal valorTerrestre;
+	
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public String getNome() {
 		return nome;
 	}
-
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	public BigDecimal getValor() {
-		return valor;
+	public Boolean getTerrestre() {
+		return terrestre;
 	}
-
-	public void setValor(BigDecimal valor) {
-		this.valor = valor;
+	public void setTerrestre(Boolean terrestre) {
+		this.terrestre = terrestre;
 	}
-
-	public String getTipoTransporte() {
-		return tipoTransporte;
+	public Boolean getAereo() {
+		return aereo;
 	}
-
-	public void setTipoTransporte(String tipoTransporte) {
-		this.tipoTransporte = tipoTransporte;
+	public void setAereo(Boolean aereo) {
+		this.aereo = aereo;
 	}
-
-	public Long getTempoMedio() {
-		return tempoMedio;
+	public Long getTempoMedioAereo() {
+		return tempoMedioAereo;
 	}
-
-	public void setTempoMedio(Long tempoMedio) {
-		this.tempoMedio = tempoMedio;
+	public void setTempoMedioAereo(Long tempoMedioAereo) {
+		this.tempoMedioAereo = tempoMedioAereo;
 	}
-
-	public Filial(Long id, String nome, BigDecimal valor, String tipoTransporte, Long tempoMedio) {
+	public Long getTempoMedioTerrestre() {
+		return tempoMedioTerrestre;
+	}
+	public void setTempoMedioTerrestre(Long tempoMedioTerrestre) {
+		this.tempoMedioTerrestre = tempoMedioTerrestre;
+	}
+	public BigDecimal getValorAereo() {
+		return valorAereo;
+	}
+	public void setValorAereo(BigDecimal valorAereo) {
+		this.valorAereo = valorAereo;
+	}
+	public BigDecimal getValorTerrestre() {
+		return valorTerrestre;
+	}
+	public void setValorTerrestre(BigDecimal valorTerrestre) {
+		this.valorTerrestre = valorTerrestre;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	public Filial(Long id, String nome, Boolean terrestre, Boolean aereo, Long tempoMedioAereo,
+			Long tempoMedioTerrestre, BigDecimal valorAereo, BigDecimal valorTerrestre) {
 		super();
 		this.id = id;
 		this.nome = nome;
-		this.valor = valor;
-		this.tipoTransporte = tipoTransporte;
-		this.tempoMedio = tempoMedio;
+		this.terrestre = terrestre;
+		this.aereo = aereo;
+		this.tempoMedioAereo = tempoMedioAereo;
+		this.tempoMedioTerrestre = tempoMedioTerrestre;
+		this.valorAereo = valorAereo;
+		this.valorTerrestre = valorTerrestre;
 	}
-
 	public Filial() {
 		super();
-	}
+	}		
 }
