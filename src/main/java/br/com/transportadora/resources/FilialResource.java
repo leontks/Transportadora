@@ -74,7 +74,7 @@ public class FilialResource {
 	}
 
 	@GetMapping("/service/transportadora/{prioridade}/{origem}/{destino}/{distancia}/{transporte}")
-	public List<FilialVO> melhorFilial(@PathVariable String prioridade, @PathVariable String origem,
+	public List<FilialVO> melhorFilial(@PathVariable Prioridade prioridade, @PathVariable String origem,
 			@PathVariable String destino, @PathVariable BigDecimal distancia, @PathVariable String transporte) {
 
 		if (prioridade == null || origem == null || destino == null || distancia == null) {
@@ -84,8 +84,8 @@ public class FilialResource {
 		
 		List<FilialVO> filialsVO = new ArrayList<FilialVO>();
 		FilialVO filialVO = new FilialVO();
-		
-		for (Filial filialCorrente : filialRepository.findAll()) {
+		List<Filial> filiais = filialRepository.findAll();
+		for (Filial filialCorrente : filiais) {
 			
 			BigDecimal valorTotalAereo = new BigDecimal(0);
 			BigDecimal valorTotalTerrestre = new BigDecimal(0);
@@ -105,7 +105,7 @@ public class FilialResource {
 			filialVO.setDestino(destino);
 			filialVO.setDistancia(distancia);
 			filialVO.setValorTotalAereo(valorTotalAereo);
-			filialVO.setPrioridade((prioridade.equals(Prioridade.preco)? Prioridade.preco : Prioridade.tempo));
+			filialVO.setPrioridade(prioridade);
 			filialVO.setValorTotalTerrestre(valorTotalTerrestre);
 			filialVO.setTempoTotalAereo(filialCorrente.getTempoMedioAereo() * Integer.parseInt(distancia.toString()));
 			filialVO.setTempoTotalTerrestre(filialCorrente.getTempoMedioTerrestre() * Integer.parseInt(distancia.toString()));
