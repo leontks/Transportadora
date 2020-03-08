@@ -33,9 +33,9 @@ public class Filial implements Serializable {
 	@Column(nullable = false)
 	private Boolean aereo;
 	@Column(nullable = false)
-	private Long tempoMedioAereo;
+	private Integer tempoMedioAereo;
 	@Column(nullable = false)
-	private Long tempoMedioTerrestre;
+	private Integer tempoMedioTerrestre;
 	@Column(nullable = false)
 	private BigDecimal valorAereo;
 	@Column(nullable = false)
@@ -65,16 +65,16 @@ public class Filial implements Serializable {
 	public void setAereo(Boolean aereo) {
 		this.aereo = aereo;
 	}
-	public Long getTempoMedioAereo() {
+	public Integer getTempoMedioAereo() {
 		return tempoMedioAereo;
 	}
-	public void setTempoMedioAereo(Long tempoMedioAereo) {
+	public void setTempoMedioAereo(Integer tempoMedioAereo) {
 		this.tempoMedioAereo = tempoMedioAereo;
 	}
-	public Long getTempoMedioTerrestre() {
+	public Integer getTempoMedioTerrestre() {
 		return tempoMedioTerrestre;
 	}
-	public void setTempoMedioTerrestre(Long tempoMedioTerrestre) {
+	public void setTempoMedioTerrestre(Integer tempoMedioTerrestre) {
 		this.tempoMedioTerrestre = tempoMedioTerrestre;
 	}
 	public BigDecimal getValorAereo() {
@@ -92,8 +92,8 @@ public class Filial implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public Filial(Long id, String nome, Boolean terrestre, Boolean aereo, Long tempoMedioAereo,
-			Long tempoMedioTerrestre, BigDecimal valorAereo, BigDecimal valorTerrestre) {
+	public Filial(Long id, String nome, Boolean terrestre, Boolean aereo, Integer tempoMedioAereo,
+			Integer tempoMedioTerrestre, BigDecimal valorAereo, BigDecimal valorTerrestre) {
 		super();
 		this.id = id;
 		this.nome = nome;
