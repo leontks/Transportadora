@@ -75,17 +75,17 @@ public class FilialResource {
 	}
 
 	@GetMapping("/service/transportadora")
-	public List<FilialVO> melhorFilial(@Valid @RequestBody FiltroVO filtro) {
+	public ResponseEntity<?> melhorFilial(@Valid @RequestBody FiltroVO filtro) {
 
 		if (filtro.getPrioridade() == null || filtro.getOrigem() == null || 
 				filtro.getDestino() == null || filtro.getDistancia() == null) {
-			//return ResponseEntity.badRequest().build();
-			return null;
+			return ResponseEntity.badRequest().build();
 		}
 		
 		List<FilialVO> filialsVO = new ArrayList<FilialVO>();
 		FilialVO filialVO = new FilialVO();
 		List<Filial> filiais = filialRepository.findAll();
+		
 		for (Filial filialCorrente : filiais) {
 			BigDecimal valorTotalAereo = new BigDecimal(0);
 			BigDecimal valorTotalTerrestre = new BigDecimal(0);
@@ -139,6 +139,6 @@ public class FilialResource {
 				});
 			}
 		}
-		return filialsVO;
+		return ResponseEntity.ok(filialsVO);
 	}
 }

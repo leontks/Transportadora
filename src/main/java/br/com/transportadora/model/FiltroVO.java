@@ -18,6 +18,10 @@ public class FiltroVO implements Serializable{
 	private Prioridade prioridade;
 	private TipoTransporte tipoTransporte;
 	
+	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 	public String getOrigem() {
 		return origem;
 	}
