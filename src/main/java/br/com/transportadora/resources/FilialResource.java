@@ -88,25 +88,22 @@ public class FilialResource {
 		FilialVO filialVO = new FilialVO();
 		List<Filial> filiais = filialRepository.findAll();
 		for (Filial filialCorrente : filiais) {
-			
 			BigDecimal valorTotalAereo = new BigDecimal(0);
 			BigDecimal valorTotalTerrestre = new BigDecimal(0);
-			
 			if(filialCorrente.getValorAereo().compareTo(BigDecimal.ZERO) > 0) {
 				valorTotalAereo = filtro.getDistancia().multiply(filialCorrente.getValorAereo());
-				valorTotalAereo = valorTotalAereo.divide(valorTotalAereo,10, RoundingMode.CEILING);
+				valorTotalAereo = valorTotalAereo.divide(new BigDecimal(10));
 			}
 			if(filialCorrente.getValorTerrestre().compareTo(BigDecimal.ZERO) > 0) {
 				valorTotalTerrestre = filtro.getDistancia().multiply(filialCorrente.getValorTerrestre());
-				valorTotalTerrestre = valorTotalTerrestre.divide(valorTotalTerrestre,10,RoundingMode.CEILING);
+				valorTotalTerrestre = valorTotalTerrestre.divide(new BigDecimal(10));
 			}
-			
 			filialVO.setId(filialCorrente.getId());
 			filialVO.setNome(filialCorrente.getNome());
 			filialVO.setValorTotalAereo(valorTotalAereo);
 			filialVO.setValorTotalTerrestre(valorTotalTerrestre);
-			filialVO.setTempoTotalAereo(filialCorrente.getTempoMedioAereo() * Integer.parseInt(filtro.getDistancia().toString()));
-			filialVO.setTempoTotalTerrestre(filialCorrente.getTempoMedioTerrestre() * Integer.parseInt(filtro.getDistancia().toString()));
+			filialVO.setTempoTotalAereo((filialCorrente.getTempoMedioAereo() * Integer.parseInt(filtro.getDistancia().toString()))/60);
+			filialVO.setTempoTotalTerrestre((filialCorrente.getTempoMedioTerrestre() * Integer.parseInt(filtro.getDistancia().toString()))/60);
 			
 			filialsVO.add(filialVO);
 		}
