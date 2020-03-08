@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.transportadora.model.Filial;
 import br.com.transportadora.model.FilialVO;
+import br.com.transportadora.model.FiltroVO;
 import br.com.transportadora.model.apiEnum.Prioridade;
+import br.com.transportadora.model.apiEnum.TipoTransporte;
 import br.com.transportadora.repository.FilialRepository;
 
 @RestController
@@ -73,11 +75,11 @@ public class FilialResource {
 		return ResponseEntity.ok(filialExistente);
 	}
 
-	@GetMapping("/service/transportadora/{prioridade}/{origem}/{destino}/{distancia}/{transporte}")
-	public List<FilialVO> melhorFilial(@PathVariable Prioridade prioridade, @PathVariable String origem,
-			@PathVariable String destino, @PathVariable BigDecimal distancia, @PathVariable String transporte) {
+	@GetMapping("/service/transportadora")
+	public List<FilialVO> melhorFilial(@Valid @RequestBody FiltroVO filtro) {
 
-		if (prioridade == null || origem == null || destino == null || distancia == null) {
+		if (filtro.getPrioridade() == null || filtro.getOrigem() == null || 
+				filtro.getDestino() == null || filtro.getDistancia() == null) {
 			//return ResponseEntity.badRequest().build();
 			return null;
 		}
@@ -91,36 +93,32 @@ public class FilialResource {
 			BigDecimal valorTotalTerrestre = new BigDecimal(0);
 			
 			if(filialCorrente.getValorAereo().compareTo(BigDecimal.ZERO) > 0) {
-				valorTotalAereo = distancia.multiply(filialCorrente.getValorAereo());
+				valorTotalAereo = filtro.getDistancia().multiply(filialCorrente.getValorAereo());
 				valorTotalAereo = valorTotalAereo.divide(valorTotalAereo,10, RoundingMode.CEILING);
 			}
 			if(filialCorrente.getValorTerrestre().compareTo(BigDecimal.ZERO) > 0) {
-				valorTotalTerrestre = distancia.multiply(filialCorrente.getValorTerrestre());
+				valorTotalTerrestre = filtro.getDistancia().multiply(filialCorrente.getValorTerrestre());
 				valorTotalTerrestre = valorTotalTerrestre.divide(valorTotalTerrestre,10,RoundingMode.CEILING);
 			}
 			
 			filialVO.setId(filialCorrente.getId());
 			filialVO.setNome(filialCorrente.getNome());
-			filialVO.setOrigem(origem);
-			filialVO.setDestino(destino);
-			filialVO.setDistancia(distancia);
 			filialVO.setValorTotalAereo(valorTotalAereo);
-			filialVO.setPrioridade(prioridade);
 			filialVO.setValorTotalTerrestre(valorTotalTerrestre);
-			filialVO.setTempoTotalAereo(filialCorrente.getTempoMedioAereo() * Integer.parseInt(distancia.toString()));
-			filialVO.setTempoTotalTerrestre(filialCorrente.getTempoMedioTerrestre() * Integer.parseInt(distancia.toString()));
+			filialVO.setTempoTotalAereo(filialCorrente.getTempoMedioAereo() * Integer.parseInt(filtro.getDistancia().toString()));
+			filialVO.setTempoTotalTerrestre(filialCorrente.getTempoMedioTerrestre() * Integer.parseInt(filtro.getDistancia().toString()));
 			
 			filialsVO.add(filialVO);
 		}
-		if (prioridade.equals(Prioridade.preco)) {
-			if(transporte.equals("aereo")) {
+		if (filtro.getPrioridade().equals(Prioridade.preco)) {
+			if(filtro.getTipoTransporte().equals(TipoTransporte.aereo)) {
 				Collections.sort(filialsVO, new Comparator<FilialVO>() {
 					@Override
 					public int compare(FilialVO o1, FilialVO o2) {
 						return o1.getValorTotalAereo().compareTo(o2.getValorTotalAereo());
 					}
 				});
-			}else if(transporte.equals("terrestre")) {
+			}else if(filtro.getTipoTransporte().equals(TipoTransporte.terrestre)) {
 				Collections.sort(filialsVO, new Comparator<FilialVO>() {
 					@Override
 					public int compare(FilialVO o1, FilialVO o2) {
@@ -128,15 +126,15 @@ public class FilialResource {
 					}
 				});
 			}
-		} else if (prioridade.equals(Prioridade.tempo)) {
-			if(transporte.equals("aereo")) {
+		} else if (filtro.getPrioridade().equals(Prioridade.tempo)) {
+			if(filtro.getTipoTransporte().equals(TipoTransporte.aereo)) {
 				Collections.sort(filialsVO, new Comparator<FilialVO>() {
 					@Override
 					public int compare(FilialVO o1, FilialVO o2) {
 						return o1.getTempoTotalAereo().compareTo(o2.getTempoTotalAereo());
 					}
 				});
-			}else if(transporte.equals("terrestre")) {
+			}else if(filtro.getTipoTransporte().equals(TipoTransporte.terrestre)) {
 				Collections.sort(filialsVO, new Comparator<FilialVO>() {
 					@Override
 					public int compare(FilialVO o1, FilialVO o2) {
