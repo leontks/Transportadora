@@ -1,11 +1,18 @@
 package br.com.transportadora.resources;
 
 import org.junit.Before;
+import org.junit.gen5.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Suite.SuiteClasses;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -24,10 +31,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.math.BigDecimal;
 
-@RunWith(SpringRunner.class)
+
 @SpringBootTest
+@WebAppConfiguration
 public class FilialResourceTest {
 
+	@Autowired
 	public WebApplicationContext context;
 
 	private MockMvc mvc;
@@ -36,17 +45,67 @@ public class FilialResourceTest {
 	public void Setup() {
 		this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
 	}
-
+	
 	@Test
-	public void TesteCase01() throws Exception {
-		String url = "/service/transportadora";
+	public void TestCase01() throws Exception {
+		String url = "/filial/service/transportadora";
+		Setup();
 		FiltroVO filtro = new FiltroVO("São Paulo - SP", "Manaus - MA", new BigDecimal(3875), Prioridade.preco,
 				TipoTransporte.aereo);
+		this.mvc.perform(get(url).content(asJsonString(filtro)).contentType(MediaType.APPLICATION_JSON_VALUE))
+			.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void TesteCase02() throws Exception {
+		String url = "/filial/service/transportadora";
+		Setup();
+		FiltroVO filtro = new FiltroVO("Florianópolis - SC", "Campinas - SP", new BigDecimal(762), Prioridade.preco,
+				TipoTransporte.terrestre);
 		this.mvc.perform(get(url).content(asJsonString(filtro))
 				.contentType(MediaType.APPLICATION_JSON_VALUE))
 			.andExpect(status().isOk());
 	}
 
+	@Test
+	public void TesteCase03() throws Exception {
+		String url = "/filial/service/transportadora";
+		Setup();
+		FiltroVO filtro = new FiltroVO("Salvador - BA", "Belém - PA", new BigDecimal(2018), Prioridade.tempo, null);
+		this.mvc.perform(get(url).content(asJsonString(filtro))
+				.contentType(MediaType.APPLICATION_JSON_VALUE))
+			.andExpect(status().isOk());
+	}
+
+	@Test
+	public void TesteCase04() throws Exception {
+		String url = "/filial/service/transportadora";
+		Setup();
+		FiltroVO filtro = new FiltroVO("São Paulo - SP", "Assunção - PAR", new BigDecimal(1350), Prioridade.tempo,
+				null);
+		this.mvc.perform(get(url).content(asJsonString(filtro))
+				.contentType(MediaType.APPLICATION_JSON_VALUE))
+			.andExpect(status().isOk());
+	}
+
+	@Test
+	public void TesteCase05() throws Exception {
+		String url = "/filial/service/transportadora";
+		Setup();
+		FiltroVO filtro = new FiltroVO("Salvador - BA", "Brasília - DF", new BigDecimal(1449), Prioridade.tempo,
+				TipoTransporte.terrestre);
+		this.mvc.perform(get(url).content(asJsonString(filtro))
+				.contentType(MediaType.APPLICATION_JSON_VALUE))
+			.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void testCase06() throws Exception {
+		String url = "/filial/filiais";
+		Setup();
+		this.mvc.perform(get(url)).andExpect(status().isOk());
+	}
+	
 	public static String asJsonString(final Object obj) {
 		try {
 			return new ObjectMapper().writeValueAsString(obj);
@@ -54,48 +113,4 @@ public class FilialResourceTest {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	/*@Test
-	public void TesteCase02() {
-		FiltroVO filtro = new FiltroVO("Florianópolis - SC", "Campinas - SP", new BigDecimal(762), Prioridade.preco,
-				TipoTransporte.terrestre);
-		FilialResource filialResource = new FilialResource();
-		List<FilialVO> filiais = new ArrayList<FilialVO>();
-		filiais.addAll(filialResource.melhorFilial(filtro));
-		Long idEsperado = (long) 3;
-		assertEquals(idEsperado, filiais.get(0).getId());
-	}
-
-	@Test
-	public void TesteCase03() {
-		FiltroVO filtro = new FiltroVO("Salvador - BA", "Belém - PA", new BigDecimal(2018), Prioridade.tempo, null);
-		FilialResource filialResource = new FilialResource();
-		List<FilialVO> filiais = new ArrayList<FilialVO>();
-		filiais.addAll(filialResource.melhorFilial(filtro));
-		Long idEsperado = (long) 3;
-		assertEquals(idEsperado, filiais.get(0).getId());
-	}
-
-	@Test
-	public void TesteCase04() {
-		FiltroVO filtro = new FiltroVO("São Paulo - SP", "Assunção - PAR", new BigDecimal(1350), Prioridade.tempo,
-				null);
-		FilialResource filialResource = new FilialResource();
-		List<FilialVO> filiais = new ArrayList<FilialVO>();
-		filiais.addAll(filialResource.melhorFilial(filtro));
-		Long idEsperado = (long) 3;
-		assertEquals(idEsperado, filiais.get(0).getId());
-	}
-
-	@Test
-	public void TesteCase05() {
-		FiltroVO filtro = new FiltroVO("Salvador - BA", "Brasília - DF", new BigDecimal(1449), Prioridade.tempo,
-				TipoTransporte.terrestre);
-		FilialResource filialResource = new FilialResource();
-		List<FilialVO> filiais = new ArrayList<FilialVO>();
-		filiais.addAll(filialResource.melhorFilial(filtro));
-		Long idEsperado = (long) 3;
-		assertEquals(idEsperado, filiais.get(0).getId());
-	}*/
-
 }
