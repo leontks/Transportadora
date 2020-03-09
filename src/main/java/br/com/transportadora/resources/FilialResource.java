@@ -83,10 +83,11 @@ public class FilialResource {
 		}
 		
 		List<FilialVO> filialsVO = new ArrayList<FilialVO>();
-		FilialVO filialVO = new FilialVO();
+		
 		List<Filial> filiais = filialRepository.findAll();
 		
 		for (Filial filialCorrente : filiais) {
+			FilialVO filialVO = new FilialVO();
 			BigDecimal valorTotalAereo = new BigDecimal(0);
 			BigDecimal valorTotalTerrestre = new BigDecimal(0);
 			if(filialCorrente.getValorAereo().compareTo(BigDecimal.ZERO) > 0) {
@@ -111,14 +112,22 @@ public class FilialResource {
 				Collections.sort(filialsVO, new Comparator<FilialVO>() {
 					@Override
 					public int compare(FilialVO o1, FilialVO o2) {
-						return o1.getValorTotalAereo().compareTo(o2.getValorTotalAereo());
+						if(o1.getValorTotalAereo().compareTo(BigDecimal.ZERO) > 0) {
+							return o1.getValorTotalAereo().compareTo(o2.getValorTotalAereo());
+						}else {
+							return o1.getValorTotalAereo().compareTo(o1.getValorTotalAereo());
+						}
 					}
 				});
 			}else if(filtro.getTipoTransporte().equals(TipoTransporte.terrestre)) {
 				Collections.sort(filialsVO, new Comparator<FilialVO>() {
 					@Override
 					public int compare(FilialVO o1, FilialVO o2) {
-						return o1.getValorTotalTerrestre().compareTo(o2.getValorTotalTerrestre());
+						if(o1.getValorTotalTerrestre().compareTo(BigDecimal.ZERO) > 0) {
+							return o1.getValorTotalTerrestre().compareTo(o2.getValorTotalTerrestre());
+						}else {
+							return o1.getValorTotalTerrestre().compareTo(o1.getValorTotalTerrestre());
+						}
 					}
 				});
 			}
@@ -139,6 +148,6 @@ public class FilialResource {
 				});
 			}
 		}
-		return ResponseEntity.ok(filialsVO);
+		return ResponseEntity.ok(filialsVO.get(0));
 	}
 }
