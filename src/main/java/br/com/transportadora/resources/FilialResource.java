@@ -112,9 +112,10 @@ public class FilialResource {
 		}
 		/*
 		 * 
-		 * Ordenação das filiais de acordo com o a prioridade e tipo de transporte desejado.
+		 * Ordenação das filiais de acordo com o a prioridade e tipo de transporte
+		 * desejado.
 		 * 
-		 * */
+		 */
 		if (filtro.getPrioridade().equals(Prioridade.preco)) {
 			if (filtro.getTipoTransporte().equals(TipoTransporte.aereo)) {
 				Collections.sort(filiaisVO, new Comparator<FilialVO>() {
@@ -126,7 +127,7 @@ public class FilialResource {
 							return o1.getValorTotalAereo().compareTo(o1.getValorTotalAereo());
 						}
 					}
-				});				
+				});
 			} else if (filtro.getTipoTransporte().equals(TipoTransporte.terrestre)) {
 				Collections.sort(filiaisVO, new Comparator<FilialVO>() {
 					@Override
@@ -156,17 +157,18 @@ public class FilialResource {
 				});
 			}
 		}
-		
+
 		/*
-		 * Como a lista já foi ordenada em caso de empate o primeiros sempre serão iguais.
-		 *  
-		 * */
-		if (filiaisVO.get(0).getValorTotalAereo().equals(filiaisVO.get(1).getValorTotalAereo()) 
+		 * Como a lista já foi ordenada em caso de empate o primeiros sempre serão
+		 * iguais. A lista retornada mostra da melhor para a pior escolha segundo as informações enviadas. 
+		 */
+		if (filiaisVO.get(0).getValorTotalAereo().equals(filiaisVO.get(1).getValorTotalAereo())
 				&& filiaisVO.get(0).getValorTotalTerrestre().equals(filiaisVO.get(1).getValorTotalTerrestre())) {
 			List<FilialVO> filiaisVOEmpate = new ArrayList<FilialVO>();
 			for (int i = 0; i <= filiaisVO.size(); i++) {
-				if ((i + 1) <= filiaisVO.size() && filiaisVO.get(i).getValorTotalAereo()
-						.equals(filiaisVO.get(i + 1).getValorTotalAereo())) {
+				if ((((i + 1) > filiaisVO.size()) ? i + 1 : i ) <= filiaisVO.size()
+						&& filiaisVO.get(i).getValorTotalAereo().equals(
+								filiaisVO.get((((i + 1) > filiaisVO.size()) ? i + 1 : i)).getValorTotalAereo())) {
 					filiaisVOEmpate.add(filiaisVO.get(i));
 				}
 			}
