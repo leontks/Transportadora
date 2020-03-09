@@ -39,7 +39,7 @@ public class FilialResource {
 		return filialRepository.findAll();
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/busca/{id}")
 	public ResponseEntity<Filial> listarFilial(@Valid @PathVariable(value = "id") Long id) {
 		Filial filial = filialRepository.getOne(id);
 		if (filial == null) {
@@ -48,12 +48,12 @@ public class FilialResource {
 		return ResponseEntity.ok(filial);
 	}
 
-	@PostMapping("/filial")
+	@PostMapping("/adiciona")
 	public Filial adicionar(@Valid @RequestBody Filial filial) {
 		return filialRepository.save(filial);
 	}
 
-	@DeleteMapping("/filial")
+	@DeleteMapping("/deleta")
 	public ResponseEntity<Void> deletar(@PathVariable Long id) {
 		Filial filialExistente = filialRepository.getOne(id);
 		if (filialExistente == null) {
@@ -63,7 +63,7 @@ public class FilialResource {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PutMapping("/filial/{id}")
+	@PutMapping("/atualiza/{id}")
 	public ResponseEntity<Filial> atualizar(@Valid @RequestBody Filial filial, @PathVariable Long id) {
 		Filial filialExistente = filialRepository.getOne(id);
 		if (filialExistente == null) {

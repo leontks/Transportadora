@@ -7,3 +7,47 @@ Código desenvoldido por: Leonado Freitas Baltar de Carvalho.
 
 
 07/03/2020
+
+Para testar as funcionalidades, por favor adicione estes registros de transportadoras filiais:
+
+
+	{
+        "id": 1,
+        "nome": "Transportadora 1",
+        "terrestre": true,
+        "aereo": false,
+        "tempoMedioAereo": 0,
+        "tempoMedioTerrestre": 60,
+        "valorAereo": 0.00,
+        "valorTerrestre": 50.00
+    }
+    {
+        "id": 2,
+        "nome": "Transportadora 2",
+        "terrestre": true,
+        "aereo": true,
+        "tempoMedioAereo": 30,
+        "tempoMedioTerrestre": 59,
+        "valorAereo": 200.00,
+        "valorTerrestre": 75.00
+    },
+    {
+        "id": 3,
+        "nome": "Transportadora 3",
+        "terrestre": true,
+        "aereo": true,
+        "tempoMedioAereo": 33,
+        "tempoMedioTerrestre": 63,
+        "valorAereo": 180.00,
+        "valorTerrestre": 55.00
+    },
+    {
+        "id": 4,
+        "nome": "Transportadora 4",
+        "terrestre": false,
+        "aereo": true,
+        "tempoMedioAereo": 30,
+        "tempoMedioTerrestre": 0,
+        "valorAereo": 175.00,
+        "valorTerrestre": 0.00
+    }
