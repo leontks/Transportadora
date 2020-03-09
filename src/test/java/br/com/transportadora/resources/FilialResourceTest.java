@@ -74,7 +74,7 @@ public class FilialResourceTest {
 		FiltroVO filtro = new FiltroVO("Salvador - BA", "Belém - PA", new BigDecimal(2018), Prioridade.tempo, null);
 		this.mvc.perform(get(url).content(asJsonString(filtro))
 				.contentType(MediaType.APPLICATION_JSON_VALUE))
-			.andExpect(status().isOk());
+			.andExpect(status().isBadRequest());
 	}
 
 	@Test
@@ -85,7 +85,7 @@ public class FilialResourceTest {
 				null);
 		this.mvc.perform(get(url).content(asJsonString(filtro))
 				.contentType(MediaType.APPLICATION_JSON_VALUE))
-			.andExpect(status().isOk());
+			.andExpect(status().isBadRequest());
 	}
 
 	@Test

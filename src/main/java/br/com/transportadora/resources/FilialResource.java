@@ -39,7 +39,7 @@ public class FilialResource {
 		return filialRepository.findAll();
 	}
 
-	@GetMapping("/filial/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<Filial> listarFilial(@Valid @PathVariable(value = "id") Long id) {
 		Filial filial = filialRepository.getOne(id);
 		if (filial == null) {
@@ -78,7 +78,7 @@ public class FilialResource {
 	public ResponseEntity<?> melhorFilial(@Valid @RequestBody FiltroVO filtro) {
 
 		if (filtro.getPrioridade() == null || filtro.getOrigem() == null || filtro.getDestino() == null
-				|| filtro.getDistancia() == null) {
+				|| filtro.getDistancia() == null || filtro.getTipoTransporte() == null) {
 			return ResponseEntity.badRequest().build();
 		}
 
@@ -110,6 +110,11 @@ public class FilialResource {
 
 			filiaisVO.add(filialVO);
 		}
+		/*
+		 * 
+		 * Ordenação das filiais de acordo com o a prioridade e tipo de transporte desejado.
+		 * 
+		 * */
 		if (filtro.getPrioridade().equals(Prioridade.preco)) {
 			if (filtro.getTipoTransporte().equals(TipoTransporte.aereo)) {
 				Collections.sort(filiaisVO, new Comparator<FilialVO>() {
