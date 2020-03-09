@@ -77,24 +77,24 @@ public class FilialResource {
 	@GetMapping("/service/transportadora")
 	public ResponseEntity<?> melhorFilial(@Valid @RequestBody FiltroVO filtro) {
 
-		if (filtro.getPrioridade() == null || filtro.getOrigem() == null || 
-				filtro.getDestino() == null || filtro.getDistancia() == null) {
+		if (filtro.getPrioridade() == null || filtro.getOrigem() == null || filtro.getDestino() == null
+				|| filtro.getDistancia() == null) {
 			return ResponseEntity.badRequest().build();
 		}
-		
-		List<FilialVO> filialsVO = new ArrayList<FilialVO>();
-		
+
+		List<FilialVO> filiaisVO = new ArrayList<FilialVO>();
+
 		List<Filial> filiais = filialRepository.findAll();
-		
+
 		for (Filial filialCorrente : filiais) {
 			FilialVO filialVO = new FilialVO();
 			BigDecimal valorTotalAereo = new BigDecimal(0);
 			BigDecimal valorTotalTerrestre = new BigDecimal(0);
-			if(filialCorrente.getValorAereo().compareTo(BigDecimal.ZERO) > 0) {
+			if (filialCorrente.getValorAereo().compareTo(BigDecimal.ZERO) > 0) {
 				valorTotalAereo = filtro.getDistancia().multiply(filialCorrente.getValorAereo());
 				valorTotalAereo = valorTotalAereo.divide(new BigDecimal(10));
 			}
-			if(filialCorrente.getValorTerrestre().compareTo(BigDecimal.ZERO) > 0) {
+			if (filialCorrente.getValorTerrestre().compareTo(BigDecimal.ZERO) > 0) {
 				valorTotalTerrestre = filtro.getDistancia().multiply(filialCorrente.getValorTerrestre());
 				valorTotalTerrestre = valorTotalTerrestre.divide(new BigDecimal(10));
 			}
@@ -102,45 +102,48 @@ public class FilialResource {
 			filialVO.setNome(filialCorrente.getNome());
 			filialVO.setValorTotalAereo(valorTotalAereo);
 			filialVO.setValorTotalTerrestre(valorTotalTerrestre);
-			filialVO.setTempoTotalAereo((filialCorrente.getTempoMedioAereo() * Integer.parseInt(filtro.getDistancia().toString()))/60);
-			filialVO.setTempoTotalTerrestre((filialCorrente.getTempoMedioTerrestre() * Integer.parseInt(filtro.getDistancia().toString()))/60);
-			
-			filialsVO.add(filialVO);
+			filialVO.setTempoTotalAereo(
+					(filialCorrente.getTempoMedioAereo() * Integer.parseInt(filtro.getDistancia().toString())) / 60);
+			filialVO.setTempoTotalTerrestre(
+					(filialCorrente.getTempoMedioTerrestre() * Integer.parseInt(filtro.getDistancia().toString()))
+							/ 60);
+
+			filiaisVO.add(filialVO);
 		}
 		if (filtro.getPrioridade().equals(Prioridade.preco)) {
-			if(filtro.getTipoTransporte().equals(TipoTransporte.aereo)) {
-				Collections.sort(filialsVO, new Comparator<FilialVO>() {
+			if (filtro.getTipoTransporte().equals(TipoTransporte.aereo)) {
+				Collections.sort(filiaisVO, new Comparator<FilialVO>() {
 					@Override
 					public int compare(FilialVO o1, FilialVO o2) {
-						if(o1.getValorTotalAereo().compareTo(BigDecimal.ZERO) > 0) {
+						if (o1.getValorTotalAereo().compareTo(BigDecimal.ZERO) > 0) {
 							return o1.getValorTotalAereo().compareTo(o2.getValorTotalAereo());
-						}else {
+						} else {
 							return o1.getValorTotalAereo().compareTo(o1.getValorTotalAereo());
 						}
 					}
-				});
-			}else if(filtro.getTipoTransporte().equals(TipoTransporte.terrestre)) {
-				Collections.sort(filialsVO, new Comparator<FilialVO>() {
+				});				
+			} else if (filtro.getTipoTransporte().equals(TipoTransporte.terrestre)) {
+				Collections.sort(filiaisVO, new Comparator<FilialVO>() {
 					@Override
 					public int compare(FilialVO o1, FilialVO o2) {
-						if(o1.getValorTotalTerrestre().compareTo(BigDecimal.ZERO) > 0) {
+						if (o1.getValorTotalTerrestre().compareTo(BigDecimal.ZERO) > 0) {
 							return o1.getValorTotalTerrestre().compareTo(o2.getValorTotalTerrestre());
-						}else {
+						} else {
 							return o1.getValorTotalTerrestre().compareTo(o1.getValorTotalTerrestre());
 						}
 					}
 				});
 			}
 		} else if (filtro.getPrioridade().equals(Prioridade.tempo)) {
-			if(filtro.getTipoTransporte().equals(TipoTransporte.aereo)) {
-				Collections.sort(filialsVO, new Comparator<FilialVO>() {
+			if (filtro.getTipoTransporte().equals(TipoTransporte.aereo)) {
+				Collections.sort(filiaisVO, new Comparator<FilialVO>() {
 					@Override
 					public int compare(FilialVO o1, FilialVO o2) {
 						return o1.getTempoTotalAereo().compareTo(o2.getTempoTotalAereo());
 					}
 				});
-			}else if(filtro.getTipoTransporte().equals(TipoTransporte.terrestre)) {
-				Collections.sort(filialsVO, new Comparator<FilialVO>() {
+			} else if (filtro.getTipoTransporte().equals(TipoTransporte.terrestre)) {
+				Collections.sort(filiaisVO, new Comparator<FilialVO>() {
 					@Override
 					public int compare(FilialVO o1, FilialVO o2) {
 						return o1.getTempoTotalTerrestre().compareTo(o2.getTempoTotalTerrestre());
@@ -148,6 +151,22 @@ public class FilialResource {
 				});
 			}
 		}
-		return ResponseEntity.ok(filialsVO.get(0));
+		
+		/*
+		 * Como a lista já foi ordenada em caso de empate o primeiros sempre serão iguais.
+		 *  
+		 * */
+		if (filiaisVO.get(0).getValorTotalAereo().equals(filiaisVO.get(1).getValorTotalAereo()) 
+				&& filiaisVO.get(0).getValorTotalTerrestre().equals(filiaisVO.get(1).getValorTotalTerrestre())) {
+			List<FilialVO> filiaisVOEmpate = new ArrayList<FilialVO>();
+			for (int i = 0; i <= filiaisVO.size(); i++) {
+				if ((i + 1) <= filiaisVO.size() && filiaisVO.get(i).getValorTotalAereo()
+						.equals(filiaisVO.get(i + 1).getValorTotalAereo())) {
+					filiaisVOEmpate.add(filiaisVO.get(i));
+				}
+			}
+			return ResponseEntity.ok(filiaisVOEmpate);
+		}
+		return ResponseEntity.ok(filiaisVO.get(0));
 	}
 }
