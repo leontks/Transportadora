@@ -12,7 +12,6 @@ Para testar as funcionalidades, por favor adicione estes registros de transporta
 
 
 	{
-        "id": 1,
         "nome": "Transportadora 1",
         "terrestre": true,
         "aereo": false,
@@ -22,7 +21,6 @@ Para testar as funcionalidades, por favor adicione estes registros de transporta
         "valorTerrestre": 50.00
     }
     {
-        "id": 2,
         "nome": "Transportadora 2",
         "terrestre": true,
         "aereo": true,
@@ -32,7 +30,6 @@ Para testar as funcionalidades, por favor adicione estes registros de transporta
         "valorTerrestre": 75.00
     },
     {
-        "id": 3,
         "nome": "Transportadora 3",
         "terrestre": true,
         "aereo": true,
@@ -42,7 +39,6 @@ Para testar as funcionalidades, por favor adicione estes registros de transporta
         "valorTerrestre": 55.00
     },
     {
-        "id": 4,
         "nome": "Transportadora 4",
         "terrestre": false,
         "aereo": true,

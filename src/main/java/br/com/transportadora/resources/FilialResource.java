@@ -53,7 +53,7 @@ public class FilialResource {
 		return filialRepository.save(filial);
 	}
 
-	@DeleteMapping("/deleta")
+	@DeleteMapping("/deleta/{id}")
 	public ResponseEntity<Void> deletar(@PathVariable Long id) {
 		Filial filialExistente = filialRepository.getOne(id);
 		if (filialExistente == null) {

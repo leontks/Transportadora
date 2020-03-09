@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.sun.istack.NotNull;
@@ -24,6 +25,11 @@ public class Filial implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@SequenceGenerator(
+            name = "answer_generator",
+            sequenceName = "answer_sequence",
+            initialValue = 1
+    )
 	@Column(nullable = false)
 	private Long id;
 	@Column(nullable = false)
